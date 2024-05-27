@@ -43,6 +43,22 @@ Before running the scripts, ensure you have the following:
 - **Google Account**: You need a Google account with Gmail access to fetch emails.
 - **WhatsApp Account**: You need a WhatsApp account to send messages.
 
+## npm Setup
+
+To initialize your Node.js project and install required modules, follow these steps:
+
+1. **Initialize npm**:
+   - Run `npm init` in your project directory.
+   - Follow the prompts to create a `package.json` file for your project.
+
+2. **Install Modules**:
+   - Run `npm install whatsapp-web.js qrcode-terminal node-cron --save` to install the required modules.
+   - This command installs the following modules:
+       - `whatsapp-web.js`: Library for interacting with WhatsApp Web.
+       - `qrcode-terminal`: Library for generating QR codes in the terminal.
+       - `node-cron`: Library for scheduling tasks.
+   - The `--save` flag adds the modules to your `package.json` dependencies.
+
 ## Getting Started
 
 Follow these steps to set up and run the project:
@@ -90,16 +106,6 @@ Once both scripts are running:
 
 - **Dependencies**: Ensure you have installed all Python dependencies listed in `requirements.txt` and Node.js dependencies listed in `package.json`.
 - **Credentials**: Handle sensitive credentials securely. Avoid sharing them publicly or committing them to version control systems.
-
-## File Structure
-
-- **app.py**: Python script to fetch emails from Gmail.
-- **index.js**: Node.js script to send emails to WhatsApp using the WhatsApp Web API.
-- **credentials.json**: Google API credentials file required by `app.py`.
-- **token.pickle**: Token file for Google API authentication.
-- **wb_db**: Data directory for WhatsApp client authentication.
-- **last_processed_time.json**: JSON file to store the timestamp of the last processed email.
-- **emails.json**: JSON file to store the details of fetched emails.
 
 ## Contributing
 
