@@ -18,16 +18,6 @@ const {
     getOauth2Client
 } = require('./auth');
 
-// exec('node whatsapp.js', (err, stdout, stderr) => {
-//     if (err) {
-//         console.error(`exec error: ${err}`);
-//         return;
-//     }
-//     if (stdout) {
-//         console.error(`Error in whatsapp.js: ${stderr}`);
-//     }
-//     console.log(`whtsapp.js: ${stdout}`);
-// });
 
 const app = express();
 app.use(bodyParser.json());
@@ -67,6 +57,7 @@ const BASE_URL = 'https://auth.moealsir.tech';
             const oauth2Client = getOauth2Client(client_id, client_secret, `${BASE_URL}/oauth2callback`);
             const authUrl = oauth2Client.generateAuthUrl({
                 access_type: 'offline',
+                prompt: 'consent',
                 scope: SCOPES,
                 state: JSON.stringify({ user_id, email_id })
             });
@@ -99,6 +90,10 @@ const BASE_URL = 'https://auth.moealsir.tech';
             const oauth2Client = new google.auth.OAuth2(client_id, client_secret, `${BASE_URL}/oauth2callback`);
 
             const { tokens } = await oauth2Client.getToken(req.query.code);
+
+            tokens.refresh_token = tokens.refresh_token || req.query.refresh_token;
+            tokens.client_id = client_id;
+            tokens.client_secret = client_secret;
 
             await SaveToken(user_id, email_id, tokens);
 

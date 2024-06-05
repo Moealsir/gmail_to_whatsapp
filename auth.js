@@ -84,9 +84,17 @@ async function CreateUserDirectory(user_id, email_id = null) {
 async function SaveToken(user_id, email_id, tokens) {
     try {
         const userDirectory = await CreateUserDirectory(user_id, email_id);
-        const tokenPath = path.join(userDirectory, 'tokens.json');
-        await fs.writeFile(tokenPath, JSON.stringify(tokens, null, 2));
-        console.log(`Tokens Saved to ${tokenPath}`);
+        const tokenPath = path.join(userDirectory, 'token.json');
+        const tokenData = {
+            token: tokens.access_token,
+            refresh_token: tokens.refresh_token || null,
+            token_uri: 'https://oauth2.googleapis.com/token',
+            client_id: tokens.client_id,
+            client_secret: tokens.client_secret,
+            scopes: tokens.scope.split(' ')
+        };
+        await fs.writeFile(tokenPath, JSON.stringify(tokenData, null, 2));
+        console.info(`User ${user_id} tokens for email ${email_id} saved.`)
     } catch (err) {
         console.error(`Error saving tokens: ${err.message}`);
         throw err;
@@ -96,13 +104,19 @@ async function SaveToken(user_id, email_id, tokens) {
 async function LoadToken(user_id, email_id) {
     try {
         const user_directory = path.join(USERS_DIR, user_id, email_id);
-        const tokenPath = path.join(user_directory, 'tokens.json');
+        const tokenPath = path.join(user_directory, 'token.json');
+
         const token = await fs.readFile(tokenPath, 'utf8');
-        return JSON.parse(token);
+        const parsedToken = JSON.parse(token);
+
+        return parsedToken;
     } catch (err) {
+        console.error('Error reading token file:', err.message);
         return null;
     }
 }
+
+
 
 async function UpdateAuthorizationStatus(user_id, email_id, status) {
     try {
